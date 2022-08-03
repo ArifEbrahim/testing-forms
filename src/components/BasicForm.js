@@ -7,7 +7,6 @@ const BasicForm = (props) => {
     isValid: isFirstNameValid,
     inputChangeHandler: firstNameChangeHandler,
     inputBlurHandler: firstNameBlurHandler,
-    setIsTouched: firstNameTouched,
     reset: resetFirstName,
   } = useInput((value) => value.trim() !== "");
 
@@ -17,7 +16,6 @@ const BasicForm = (props) => {
     isValid: isLastNameValid,
     inputChangeHandler: lastNameChangeHandler,
     inputBlurHandler: lastNameBlurHandler,
-    setIsTouched: lastNameTouched,
     reset: resetLastName,
   } = useInput((value) => value.trim() !== "");
 
@@ -28,9 +26,6 @@ const BasicForm = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-
-    firstNameTouched(true);
-    lastNameTouched(true);
 
     if (!isFirstNameValid || !isLastNameValid) {
       return;
