@@ -2,25 +2,17 @@ import { useState } from "react";
 
 const BasicForm = (props) => {
   const [firstName, setFirstName] = useState("");
-  const [isFirstNameValid, setIsFirstNameValid] = useState(true);
   const [isFirstNameTouched, setIsFirstNameTouched] = useState(false);
 
-  const isFirstNameInputValid = isFirstNameValid && isFirstNameTouched;
+  const isFirstNameValid = firstName.trim() !== '';
+  const isFirstNameInputInvalid = !isFirstNameValid && isFirstNameTouched;
 
   const firstNameChangeHandler = (event) => {
     setFirstName(event.target.value);
-
-    if (event.target.value.trim() !== "") {
-      setIsFirstNameValid(true);
-    }
   };
 
   const firstNameBlurHandler = () => {
     setIsFirstNameTouched(true);
-
-    if (firstName.trim() === "") {
-      setIsFirstNameValid(false);
-    }
   };
 
   const submitHandler = (event) => {
@@ -28,11 +20,8 @@ const BasicForm = (props) => {
 
     setIsFirstNameTouched(true);
 
-    if (firstName.trim() === "") {
-      setIsFirstNameValid(false);
+    if (!isFirstNameValid) {
       return;
-    } else {
-      setIsFirstNameValid(true);
     }
   };
 
@@ -41,7 +30,7 @@ const BasicForm = (props) => {
       <div className="control-group">
         <div
           className={
-            isFirstNameInputValid ? "form-control" : "form-control invalid"
+            isFirstNameInputInvalid ? "form-control" : "form-control invalid"
           }
           data-testid="first-name-container"
         >
@@ -53,7 +42,7 @@ const BasicForm = (props) => {
             onChange={firstNameChangeHandler}
             onBlur={firstNameBlurHandler}
           />
-          {!isFirstNameValid && <p>First name must not be blank</p>}
+          {isFirstNameInputInvalid && <p>First name must not be blank</p>}
         </div>
         <div className="form-control">
           <label htmlFor="last-name">Last Name</label>
