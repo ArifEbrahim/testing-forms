@@ -1,6 +1,9 @@
 import useInput from "../hooks/use-input";
 
 const BasicForm = (props) => {
+  const isNotEmpty = (value) => value.trim() !== "";
+  const isEmail = (value) => value.includes("@");
+
   const {
     value: firstName,
     hasError: firstNameHasError,
@@ -8,7 +11,7 @@ const BasicForm = (props) => {
     inputChangeHandler: firstNameChangeHandler,
     inputBlurHandler: firstNameBlurHandler,
     reset: resetFirstName,
-  } = useInput((value) => value.trim() !== "");
+  } = useInput(isNotEmpty);
 
   const {
     value: lastName,
@@ -17,22 +20,32 @@ const BasicForm = (props) => {
     inputChangeHandler: lastNameChangeHandler,
     inputBlurHandler: lastNameBlurHandler,
     reset: resetLastName,
-  } = useInput((value) => value.trim() !== "");
+  } = useInput(isNotEmpty);
+
+  const {
+    value: email,
+    hasError: emailHasError,
+    isValid: isEmailValid,
+    inputChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler,
+    reset: resetEmail,
+  } = useInput(isEmail);
 
   let isFormValid = false;
-  if (isFirstNameValid && isLastNameValid) {
+  if (isFirstNameValid && isLastNameValid && isEmailValid) {
     isFormValid = true;
   }
 
   const submitHandler = (event) => {
     event.preventDefault();
 
-    if (!isFirstNameValid || !isLastNameValid) {
+    if (!isFormValid) {
       return;
     }
 
     resetFirstName();
     resetLastName();
+    resetEmail();
   };
 
   return (
@@ -52,7 +65,7 @@ const BasicForm = (props) => {
             onChange={firstNameChangeHandler}
             onBlur={firstNameBlurHandler}
           />
-          {firstNameHasError && <p>First name must not be blank</p>}
+          {firstNameHasError && <p className="error-text">First name must not be blank</p>}
         </div>
         <div
           className={lastNameHasError ? "form-control invalid" : "form-control"}
@@ -65,13 +78,20 @@ const BasicForm = (props) => {
             onChange={lastNameChangeHandler}
             onBlur={lastNameBlurHandler}
           />
-          {lastNameHasError && <p>Last name must not be blank</p>}
+          {lastNameHasError && <p className="error-text">Last name must not be blank</p>}
         </div>
       </div>
-      {/* <div className="form-control">
+      <div className={emailHasError ? "form-control invalid" : "form-control"}>
         <label htmlFor="email">E-Mail Address</label>
-        <input type="text" id="email" />
-      </div> */}
+        <input
+          type="text"
+          id="email"
+          value={email}
+          onChange={emailChangeHandler}
+          onBlur={emailBlurHandler}
+        />
+        {emailHasError && <p className="error-text">Email must be valid</p>}
+      </div>
       <div className="form-actions">
         <button disabled={!isFormValid}>Submit</button>
       </div>
