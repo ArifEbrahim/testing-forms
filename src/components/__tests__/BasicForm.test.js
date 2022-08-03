@@ -27,4 +27,16 @@ describe("BasicForm", () => {
     const errorMsg = screen.getByText(/First name must not be blank/);
     expect(errorMsg).toBeInTheDocument();
   });
+
+  it("removes errors following submission of valid input", () => {
+    render(<BasicForm />);
+    const submitBtn = screen.getByText(/Submit/);
+    userEvent.click(submitBtn);
+    const errorMsg = screen.getByText(/First name must not be blank/);
+    expect(errorMsg).toBeInTheDocument();
+    const firstNameInput = screen.getByLabelText(/First Name/);
+    userEvent.type(firstNameInput, 'test');
+    userEvent.click(submitBtn);
+    expect(errorMsg).not.toBeInTheDocument();
+  });
 });
