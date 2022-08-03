@@ -30,7 +30,7 @@ const BasicForm = (props) => {
       <div className="control-group">
         <div
           className={
-            isFirstNameInputInvalid ? "form-control" : "form-control invalid"
+            isFirstNameInputInvalid ? "form-control invalid" : "form-control"
           }
           data-testid="first-name-container"
         >
