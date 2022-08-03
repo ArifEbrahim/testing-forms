@@ -1,24 +1,19 @@
-import { useState } from "react";
+import useInput from "../hooks/use-input";
 
 const BasicForm = (props) => {
-  const [firstName, setFirstName] = useState("");
-  const [isFirstNameTouched, setIsFirstNameTouched] = useState(false);
-
-  const isFirstNameValid = firstName.trim() !== '';
-  const isFirstNameInputInvalid = !isFirstNameValid && isFirstNameTouched;
-
-  const firstNameChangeHandler = (event) => {
-    setFirstName(event.target.value);
-  };
-
-  const firstNameBlurHandler = () => {
-    setIsFirstNameTouched(true);
-  };
+  const {
+    value: firstName,
+    hasError: firstNameHasError,
+    isValid: isFirstNameValid,
+    inputChangeHandler: firstNameChangeHandler,
+    inputBlurHandler: firstNameBlurHandler,
+    setIsTouched: firstNameTouched,
+  } = useInput((value) => value.trim() !== "");
 
   const submitHandler = (event) => {
     event.preventDefault();
 
-    setIsFirstNameTouched(true);
+    firstNameTouched(true);
 
     if (!isFirstNameValid) {
       return;
@@ -30,7 +25,7 @@ const BasicForm = (props) => {
       <div className="control-group">
         <div
           className={
-            isFirstNameInputInvalid ? "form-control invalid" : "form-control"
+            firstNameHasError ? "form-control invalid" : "form-control"
           }
           data-testid="first-name-container"
         >
@@ -42,7 +37,7 @@ const BasicForm = (props) => {
             onChange={firstNameChangeHandler}
             onBlur={firstNameBlurHandler}
           />
-          {isFirstNameInputInvalid && <p>First name must not be blank</p>}
+          {firstNameHasError && <p>First name must not be blank</p>}
         </div>
         <div className="form-control">
           <label htmlFor="last-name">Last Name</label>
