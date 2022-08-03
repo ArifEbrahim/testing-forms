@@ -68,10 +68,10 @@ const BasicForm = (props) => {
           {lastNameHasError && <p>Last name must not be blank</p>}
         </div>
       </div>
-      <div className="form-control">
+      {/* <div className="form-control">
         <label htmlFor="email">E-Mail Address</label>
         <input type="text" id="email" />
-      </div>
+      </div> */}
       <div className="form-actions">
         <button disabled={!isFormValid}>Submit</button>
       </div>
