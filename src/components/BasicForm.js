@@ -5,14 +5,20 @@ const BasicForm = (props) => {
   const [isFirstNameValid, setIsFirstNameValid] = useState(true);
   const [isFirstNameTouched, setIsFirstNameTouched] = useState(false);
 
+  const isFirstNameInputValid = isFirstNameValid && isFirstNameTouched;
+
   const firstNameChangeHandler = (event) => {
     setFirstName(event.target.value);
+
+    if (event.target.value.trim() !== "") {
+      setIsFirstNameValid(true);
+    }
   };
 
   const firstNameBlurHandler = () => {
     setIsFirstNameTouched(true);
 
-    if (!firstName) {
+    if (firstName.trim() === "") {
       setIsFirstNameValid(false);
     }
   };
@@ -22,7 +28,7 @@ const BasicForm = (props) => {
 
     setIsFirstNameTouched(true);
 
-    if (!firstName) {
+    if (firstName.trim() === "") {
       setIsFirstNameValid(false);
       return;
     } else {
@@ -34,7 +40,9 @@ const BasicForm = (props) => {
     <form onSubmit={submitHandler}>
       <div className="control-group">
         <div
-          className={isFirstNameValid ? "form-control" : "form-control invalid"}
+          className={
+            isFirstNameInputValid ? "form-control" : "form-control invalid"
+          }
           data-testid="first-name-container"
         >
           <label htmlFor="first-name">First Name</label>
