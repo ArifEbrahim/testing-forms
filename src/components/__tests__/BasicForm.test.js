@@ -17,4 +17,14 @@ describe("BasicForm", () => {
     const errorMsg = screen.getByText(/First name must not be blank/);
     expect(errorMsg).toBeInTheDocument();
   });
+
+  it("displays an error if input not valid and user clicks away", () => {
+    render(<BasicForm />);
+    const firstNameInput = screen.getByLabelText(/First Name/);
+    userEvent.click(firstNameInput);
+    const firstNameContainer = screen.getByTestId(/first-name-container/);
+    userEvent.click(firstNameContainer);
+    const errorMsg = screen.getByText(/First name must not be blank/);
+    expect(errorMsg).toBeInTheDocument();
+  });
 });
