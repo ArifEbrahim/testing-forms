@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const BasicForm = (props) => {
   const [firstName, setFirstName] = useState("");
-  const [isFirstNameValid, setIsFirstNameValid] = useState("true");
+  const [isFirstNameValid, setIsFirstNameValid] = useState(true);
   const [isFirstNameTouched, setIsFirstNameTouched] = useState(false);
 
   const firstNameChangeHandler = (event) => {
@@ -20,6 +20,8 @@ const BasicForm = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
 
+    setIsFirstNameTouched(true);
+
     if (!firstName) {
       setIsFirstNameValid(false);
       return;
@@ -31,7 +33,10 @@ const BasicForm = (props) => {
   return (
     <form onSubmit={submitHandler}>
       <div className="control-group">
-        <div className="form-control" data-testid="first-name-container">
+        <div
+          className={isFirstNameValid ? "form-control" : "form-control invalid"}
+          data-testid="first-name-container"
+        >
           <label htmlFor="first-name">First Name</label>
           <input
             type="text"
