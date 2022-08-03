@@ -50,4 +50,16 @@ describe("BasicForm", () => {
     userEvent.type(firstNameInput, "test");
     expect(errorMsg).not.toBeInTheDocument();
   });
+
+  it("clears inputs on successfull submission", () => {
+    render(<BasicForm />);
+    const submitBtn = screen.getByText(/Submit/);
+    userEvent.click(submitBtn);
+    const errorMsg = screen.getByText(/First name must not be blank/);
+    expect(errorMsg).toBeInTheDocument();
+    const firstNameInput = screen.getByLabelText(/First Name/);
+    userEvent.type(firstNameInput, "test");
+    userEvent.click(submitBtn);
+    expect(firstNameInput.value).toBe('');
+  });
 });
