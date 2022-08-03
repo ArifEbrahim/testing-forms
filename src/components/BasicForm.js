@@ -8,19 +8,36 @@ const BasicForm = (props) => {
     inputChangeHandler: firstNameChangeHandler,
     inputBlurHandler: firstNameBlurHandler,
     setIsTouched: firstNameTouched,
-    reset: resetFirstName
+    reset: resetFirstName,
   } = useInput((value) => value.trim() !== "");
+
+  const {
+    value: lastName,
+    hasError: lastNameHasError,
+    isValid: isLastNameValid,
+    inputChangeHandler: lastNameChangeHandler,
+    inputBlurHandler: lastNameBlurHandler,
+    setIsTouched: lastNameTouched,
+    reset: resetLastName,
+  } = useInput((value) => value.trim() !== "");
+
+  let isFormValid = false;
+  if (isFirstNameValid && isLastNameValid) {
+    isFormValid = true;
+  }
 
   const submitHandler = (event) => {
     event.preventDefault();
 
     firstNameTouched(true);
+    lastNameTouched(true);
 
-    if (!isFirstNameValid) {
+    if (!isFirstNameValid || !isLastNameValid) {
       return;
     }
 
     resetFirstName();
+    resetLastName();
   };
 
   return (
@@ -42,9 +59,18 @@ const BasicForm = (props) => {
           />
           {firstNameHasError && <p>First name must not be blank</p>}
         </div>
-        <div className="form-control">
+        <div
+          className={lastNameHasError ? "form-control invalid" : "form-control"}
+        >
           <label htmlFor="last-name">Last Name</label>
-          <input type="text" id="last-name" />
+          <input
+            type="text"
+            id="last-name"
+            value={lastName}
+            onChange={lastNameChangeHandler}
+            onBlur={lastNameBlurHandler}
+          />
+          {lastNameHasError && <p>Last name must not be blank</p>}
         </div>
       </div>
       <div className="form-control">
@@ -52,7 +78,7 @@ const BasicForm = (props) => {
         <input type="text" id="email" />
       </div>
       <div className="form-actions">
-        <button>Submit</button>
+        <button disabled={!isFormValid}>Submit</button>
       </div>
     </form>
   );
